@@ -10,6 +10,13 @@ import js-file("animate") as A
 ball-radius = 15
 sphere-segments = 15
 
+play-area-height = 400
+
+ground-length = 10000
+ground-height = 200
+
+general-depth = 20
+
 # World init
 scene = THREE.scene()
 camera = THREE.perspective-camera-default()
@@ -39,7 +46,42 @@ fun player():
   end
 end
 
+fun ground():
+  top-collider = MATTER.rectangle(
+    0, 
+    0 - (play-area-height / 2) - (ground-height / 2), 
+    ground-length, 
+    ground-height, 
+    true
+  )
+  bottom-collider = MATTER.rectangle(
+    0, 
+    (play-area-height / 2) + (ground-height / 2), 
+    ground-length, 
+    ground-height, 
+    true
+  )
+
+  ground-geom = THREE.box-geom(ground-length, ground-height, general-depth)
+  ground-mat = THREE.simple-mesh-basic-mat(1671168)
+
+  bottom-vis = THREE.mesh(ground-geom, ground-mat)
+  top-vis = THREE.mesh(ground-geom, ground-mat)
+
+  block:
+    THREE.set-pos-y(bottom-vis, 0 - (play-area-height / 2) - (ground-height / 2))
+    THREE.set-pos-y(top-vis, (play-area-height / 2) + (ground-height / 2))
+    THREE.scene-add(scene, bottom-vis)
+    THREE.scene-add(scene, top-vis)
+
+    MATTER.add-to-world(engine, [L.list: bottom-collider, top-collider])
+
+  end
+
+end
+
 shadow player = player()
+shadow ground = ground()
 
 context = {
   to-update: [L.list: player],
