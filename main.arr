@@ -63,5 +63,6 @@ animator = lam(shadow context):
 
 end
 
+MATTER.run-engine(runner, engine)
 
 A.animate(renderer, scene, camera, animator, context)
