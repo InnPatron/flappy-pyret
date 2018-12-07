@@ -42,7 +42,8 @@ end
 shadow player = player()
 
 context = {
-  to-update: [L.list: player]
+  to-update: [L.list: player],
+  player: player
 }
 
 animator = lam(shadow context):
