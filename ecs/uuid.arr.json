@@ -1,0 +1,15 @@
+{
+  "requires": [ ],
+  "provides": {
+    "shorthands": { },
+    "values": { 
+      "uuid": ["arrow", [], ["local", "UUID"]]
+    },
+
+    "aliases": { },
+    "datatypes": { 
+      "UUID": ["data", "UUID", [], [], {}]
+    }
+      
+  }
+}

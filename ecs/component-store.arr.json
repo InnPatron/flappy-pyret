@@ -1,0 +1,21 @@
+{
+  "requires": [
+    { 
+      "protocol": "js-file", 
+      "args": ["uuid"]
+    }
+  ],
+  "provides": {
+    "shorthands": {
+      "sOfA": ["tyapp", ["local", "Store"], [["tid", "a"]]],
+      "tva": ["tid", "a"]
+    },
+    "values": {
+      "create": ["forall", ["a"], ["arrow", [], "sOfA"]],
+      "add": ["forall", ["a"], ["arrow", ["sOfA", ["local", "uuid.UUID"], "tva"], "sOfA"]]
+    },
+    "datatypes": {
+      "Store": ["data", "Store", ["a"], [], {}]
+    }
+  }
+}
