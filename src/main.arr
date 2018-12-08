@@ -110,7 +110,6 @@ animator = lam(shadow context):
 
     if I.query-input().space:
       block:
-        G.console-log("foo")
         MATTER.set-velocity(context.player.col, flap-x-velocity, 0 - flap-y-velocity)
       end
     else:
