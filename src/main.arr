@@ -5,6 +5,7 @@ import js-file("bindings/pymatter") as MATTER
 import js-file("ecs/component-store") as CS
 import js-file("ecs/uuid") as U
 import js-file("animate") as A
+import js-file("input") as I
 
 # Constants
 ball-radius = 15
@@ -102,6 +103,7 @@ animator = lam(shadow context):
       end
 
     end
+
   end
 
 end
