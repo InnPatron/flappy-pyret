@@ -3,10 +3,12 @@ import global as G
 
 import js-file("bindings/pythree") as THREE
 import js-file("bindings/pymatter") as MATTER
+import js-file("bindings/dom") as DOM
 import js-file("ecs/component-store") as CS
 import js-file("ecs/uuid") as U
 import js-file("animate") as A
 import js-file("input") as I
+import js-file("helpers") as H
 
 # Constants
 ball-radius = 15
@@ -88,6 +90,8 @@ end
 shadow player = player()
 shadow ground = ground()
 
+text = DOM.get-element("distance")
+
 context = {
   to-update: [L.list: player],
   player: player
@@ -107,6 +111,11 @@ animator = lam(shadow context):
       end
 
     end
+
+    player-pos = THREE.get-pos(context.player.vis)
+    string-distance = G.num-to-str(player-pos.x)
+    new-text = H.concat-strings([L.list: "Distance: ", string-distance])
+    DOM.modify-element(text, "innerHTML", new-text)
 
     if I.query-input().space:
       block:
