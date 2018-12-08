@@ -1,4 +1,5 @@
 import list as L
+import global as G
 
 import js-file("bindings/pythree") as THREE
 import js-file("bindings/pymatter") as MATTER
@@ -17,6 +18,9 @@ ground-length = 10000
 ground-height = 200
 
 general-depth = 20
+
+flap-x-velocity = 0
+flap-y-velocity = 6
 
 # World init
 scene = THREE.scene()
@@ -102,6 +106,15 @@ animator = lam(shadow context):
         u
       end
 
+    end
+
+    if I.query-input().space:
+      block:
+        G.console-log("foo")
+        MATTER.set-velocity(context.player.col, flap-x-velocity, 0 - flap-y-velocity)
+      end
+    else:
+      nothing
     end
 
   end
