@@ -30,6 +30,10 @@ module.exports = {
     body.restitution = restitution;
   },
 
+  'set-air-friction': function(body, airFriction) {
+    body.frictionAir = airFriction;
+  },
+
   'add-to-world': function(engine, bodies) {
     MATTER.World.add(engine.world, bodies);
   },
