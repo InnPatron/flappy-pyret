@@ -12,7 +12,7 @@ import js-file("input") as I
 ball-radius = 15
 sphere-segments = 15
 
-play-area-height = 400
+play-area-height = 600
 
 ground-length = 10000
 ground-height = 200
