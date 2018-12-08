@@ -98,7 +98,8 @@ text = DOM.get-element("distance")
 
 context = {
   to-update: [L.list: player],
-  player: player
+  player: player,
+  camera: camera
 }
 
 animator = lam(shadow context):
@@ -120,6 +121,8 @@ animator = lam(shadow context):
     string-distance = G.num-to-str(player-pos.x)
     new-text = H.concat-strings([L.list: "Distance: ", string-distance])
     DOM.modify-element(text, "innerHTML", new-text)
+
+    THREE.set-pos-x(context.camera, player-pos.x)
 
     if I.query-input().space:
       block:
