@@ -21,7 +21,7 @@ ground-height = 200
 
 general-depth = 20
 
-flap-x-velocity = 0
+x-velocity = 5
 flap-y-velocity = 6
 
 # World init
@@ -45,6 +45,10 @@ fun player():
   block: 
     THREE.scene-add(scene, ball-vis)
     MATTER.add-to-world(engine, [L.list: ball-collider])
+
+
+    MATTER.set-velocity(ball-collider, x-velocity, 0)
+    MATTER.set-air-friction(ball-collider, 0)
 
     { 
       vis: ball-vis,
@@ -119,7 +123,7 @@ animator = lam(shadow context):
 
     if I.query-input().space:
       block:
-        MATTER.set-velocity(context.player.col, flap-x-velocity, 0 - flap-y-velocity)
+        MATTER.set-velocity(context.player.col, x-velocity, 0 - flap-y-velocity)
       end
     else:
       nothing
