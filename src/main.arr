@@ -69,18 +69,36 @@ fun player():
   end
 end
 
+fun set-obstacle-position(shadow obstacle, x, y):
+  top-collider = obstacle.top.col
+  top-vis = obstacle.top.vis
+
+  bottom-collider = obstacle.bottom.col
+  bottom-vis = obstacle.bottom.vis
+
+  block:
+    MATTER.set-pos(top-collider, x, y - (obstacle-height / 2) - (obstacle-gap / 2))
+    THREE.set-pos(top-vis, MATTER.get-pos-x(top-collider), 0 - MATTER.get-pos-y(top-collider), 0)
+
+    MATTER.set-pos(bottom-collider, x, y + (obstacle-height / 2) + (obstacle-gap / 2))
+    THREE.set-pos(bottom-vis, MATTER.get-pos-x(bottom-collider), 0 - MATTER.get-pos-y(bottom-collider), 0)
+
+    obstacle
+  end
+end
+
 fun obstacle(x, y):
   top = MATTER.rectangle(
-    x,
-    y - (obstacle-height / 2) - (obstacle-gap / 2),
+    0,
+    0,
     obstacle-width,
     obstacle-height,
     true
   )
 
   bottom = MATTER.rectangle(
-    x,
-    y + (obstacle-height / 2) + (obstacle-gap / 2),
+    0,
+    0,
     obstacle-width,
     obstacle-height,
     true
@@ -104,15 +122,15 @@ fun obstacle(x, y):
 
     MATTER.add-to-world(engine, [L.list: top, bottom])
 
-    THREE.set-pos(top-vis, MATTER.get-pos-x(top), 0 - MATTER.get-pos-y(top), 0)
-    THREE.set-pos(bottom-vis, MATTER.get-pos-x(bottom), 0 - MATTER.get-pos-y(bottom), 0)
     THREE.scene-add(scene, top-vis)
     THREE.scene-add(scene, bottom-vis)
 
     shadow top = { col: top, vis: top-vis }
     shadow bottom = { col: bottom, vis: bottom-vis }
 
-    { top: top, bottom: bottom }
+    shadow obstacle = { top: top, bottom: bottom }
+
+    set-obstacle-position(obstacle, x, y)
   end
 end
 
