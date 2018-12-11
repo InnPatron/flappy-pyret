@@ -30,6 +30,8 @@ obstacle-gap = ball-radius * 6
 
 # 1 obstacle every obstacle-period units
 obstacle-period = 500
+# player passes 3 obstacles, furthest obstacle is recycled
+max-obstacles = 4
 limbo = 9000
 
 # Collision stuff
@@ -195,6 +197,34 @@ fun ground():
 
 end
 
+
+fun update-obstacles(obstacles, shadow player):
+  # last obstacle in the list
+  last = L.length(obstacles) - 1
+  var i = 0
+  for L.map(o from obstacles):
+    block:
+      distance = player-position(player).x - obstacle-position(o).x
+
+      if distance > (max-obstacles * obstacle-period):
+        last-obstacle-index = if i == 0:
+          9
+        else:
+          i - 1
+        end
+        last-obstacle = L.at(obstacles, last-obstacle-index)
+        last-obstacle-position = obstacle-position(last-obstacle)
+        set-obstacle-position(o, last-obstacle-position.x + obstacle-period, 0)
+      else:
+        nothing
+      end
+
+      i := i + 1
+      o
+    end
+  end
+end
+
 animator = lam(shadow context):
   block:
 
@@ -209,6 +239,8 @@ animator = lam(shadow context):
       end
 
     end
+
+    update-obstacles(context.obstacles, context.player)
 
     player-pos = THREE.get-pos(context.player.vis)
     string-distance = G.num-to-str(player-pos.x)
