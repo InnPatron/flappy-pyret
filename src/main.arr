@@ -230,6 +230,41 @@ fun update-obstacles(obstacles, shadow player):
   end
 end
 
+fun check-game-over(shadow context):
+
+  collision = for L.reduce(collision from false, o from context.obstacles):
+    if MATTER.collides(o.top.col, context.player.col):
+      true
+    else if MATTER.collides(o.bottom.col, context.player.col):
+      true
+    else:
+      collision
+    end
+  end
+ 
+  if collision:
+    # Game ended
+    MATTER.stop-runner(runner)
+  else:
+
+    shadow collision = if MATTER.collides(context.ground.bottom.col, context.player.col):
+      true
+    else if MATTER.collides(context.ground.top.col, context.player.col):
+      true
+    else:
+      false
+    end
+
+    if collision:
+      # Game ended
+      MATTER.stop-runner(runner)
+    else:
+      nothing
+    end
+
+  end
+end
+
 animator = lam(shadow context):
   block:
 
@@ -245,6 +280,7 @@ animator = lam(shadow context):
 
     end
 
+    check-game-over(context)
     update-obstacles(context.obstacles, context.player)
 
     player-pos = THREE.get-pos(context.player.vis)
