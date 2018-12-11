@@ -97,6 +97,10 @@ module.exports = {
     return MATTER.Composite.create({ bodies: bodies, constraints: constraints});
   },
 
+  'composite-translate': function(composite, x, y) {
+    MATTER.Composite.translate(composite, x, y);
+  },
+
   'next-group': function() {
     return MATTER.Body.nextGroup(true);
   },
