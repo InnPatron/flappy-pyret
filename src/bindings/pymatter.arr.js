@@ -120,4 +120,8 @@ module.exports = {
   'set-collision-mask': function(body, mask) {
     body.collisionFilter.mask = mask;
   },
+
+  'collides': function(bodyA, bodyB) {
+    return MATTER.SAT.collides(bodyA, bodyB).collided;
+  },
 };
