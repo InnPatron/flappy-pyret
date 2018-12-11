@@ -253,6 +253,10 @@ animator = lam(shadow context):
     DOM.modify-element(text, "innerHTML", new-text)
 
     THREE.set-pos-x(context.camera, player-pos.x)
+    THREE.set-pos-x(context.ground.top.vis, player-pos.x)
+    THREE.set-pos-x(context.ground.bottom.vis, player-pos.x)
+    MATTER.set-pos-x(context.ground.top.col, player-pos.x)
+    MATTER.set-pos-x(context.ground.bottom.col, player-pos.x)
 
     if I.query-input().space:
       block:
