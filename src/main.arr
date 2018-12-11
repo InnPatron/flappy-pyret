@@ -49,6 +49,10 @@ engine = MATTER.create-engine()
 runner = MATTER.create-runner()
 
 # Init functions 
+fun player-position(shadow player):
+  THREE.get-pos(player.vis)
+end
+
 fun player():
   ball-collider = MATTER.circle(0, 0, ball-radius, false)
   ball-geom = THREE.sphere-geom(ball-radius, sphere-segments, sphere-segments)
@@ -72,6 +76,17 @@ fun player():
       col: ball-collider 
     }
   end
+end
+
+fun obstacle-position(shadow obstacle):
+
+  top-vis = obstacle.top.vis
+  bottom-vis = obstacle.bottom.vis
+
+  top-pos = THREE.get-pos(top-vis)
+  bottom-pos = THREE.get-pos(top-vis)
+
+  { x: top-pos.x, y: (top-pos.y + bottom-pos.y) / 2 }
 end
 
 fun set-obstacle-position(shadow obstacle, x, y):
