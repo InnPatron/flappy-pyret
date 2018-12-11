@@ -70,7 +70,6 @@ fun player():
     MATTER.set-collision-catgeory(ball-collider, main-collision-category)
     MATTER.set-collision-mask(ball-collider, main-collision-category)
 
-    MATTER.set-velocity(ball-collider, x-velocity, 0)
     MATTER.set-air-friction(ball-collider, 0)
 
     { 
@@ -345,6 +344,7 @@ fun init-game():
   }
 
   block:
+    MATTER.set-velocity(player.col, x-velocity, 0)
     init-obstacles(obstacles)
     MATTER.run-engine(runner, engine)
     A.animate(renderer, scene, camera, animator, context)
