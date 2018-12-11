@@ -24,10 +24,14 @@ general-depth = 20
 x-velocity = 5
 flap-y-velocity = 6
 
-obstacle-group = -1
 obstacle-height = play-area-height
 obstacle-width = ball-radius * ( 3 / 2 )
 obstacle-gap = ball-radius * 6
+
+# Collision stuff
+obstacle-group = -1
+player-group = 1
+main-collision-category = MATTER.next-category()
 
 # World init
 scene = THREE.scene()
@@ -51,6 +55,9 @@ fun player():
     THREE.scene-add(scene, ball-vis)
     MATTER.add-to-world(engine, [L.list: ball-collider])
 
+    MATTER.set-collision-group(ball-collider, player-group)
+    MATTER.set-collision-catgeory(ball-collider, main-collision-category)
+    MATTER.set-collision-mask(ball-collider, main-collision-category)
 
     MATTER.set-velocity(ball-collider, x-velocity, 0)
     MATTER.set-air-friction(ball-collider, 0)
@@ -90,6 +97,10 @@ fun obstacle(x, y):
   block:
     MATTER.set-collision-group(top, obstacle-group)
     MATTER.set-collision-group(bottom, obstacle-group)
+    MATTER.set-collision-catgeory(top, main-collision-category)
+    MATTER.set-collision-catgeory(bottom, main-collision-category)
+    MATTER.set-collision-mask(top, main-collision-category)
+    MATTER.set-collision-mask(bottom, main-collision-category)
 
     MATTER.composite-translate(composite, x, y)
     MATTER.add-to-world(engine, [L.list: top, bottom, composite])
@@ -129,6 +140,13 @@ fun ground():
     THREE.scene-add(scene, bottom-vis)
     THREE.scene-add(scene, top-vis)
 
+
+    MATTER.set-collision-group(top-collider, obstacle-group)
+    MATTER.set-collision-group(bottom-collider, obstacle-group)
+    MATTER.set-collision-catgeory(top-collider, main-collision-category)
+    MATTER.set-collision-catgeory(bottom-collider, main-collision-category)
+    MATTER.set-collision-mask(top-collider, main-collision-category)
+    MATTER.set-collision-mask(bottom-collider, main-collision-category)
     MATTER.add-to-world(engine, [L.list: bottom-collider, top-collider])
 
   end
@@ -179,6 +197,8 @@ animator = lam(shadow context):
   end
 
 end
+
+obstacle(400, 0)
 
 MATTER.run-engine(runner, engine)
 
