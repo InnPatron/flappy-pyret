@@ -24,6 +24,11 @@ general-depth = 20
 x-velocity = 5
 flap-y-velocity = 6
 
+obstacle-group = -1
+obstacle-height = play-area-height
+obstacle-width = ball-radius * ( 3 / 2 )
+obstacle-gap = ball-radius * 6
+
 # World init
 scene = THREE.scene()
 camera = THREE.perspective-camera-default()
@@ -54,6 +59,45 @@ fun player():
       vis: ball-vis,
       col: ball-collider 
     }
+  end
+end
+
+fun obstacle(x, y):
+  top = MATTER.rectangle(
+    0,
+    0 - (obstacle-height / 2) - (obstacle-gap / 2),
+    obstacle-width,
+    obstacle-height,
+    true
+  )
+
+  bottom = MATTER.rectangle(
+    0,
+    (obstacle-height / 2) + (obstacle-gap / 2),
+    obstacle-width,
+    obstacle-height,
+    true
+  )
+
+  obstacle-geom = THREE.box-geom(obstacle-width, obstacle-height, general-depth)
+  obstacle-mat = THREE.simple-mesh-basic-mat(1671168)
+
+  composite = MATTER.composite-create([L.list: top, bottom], [L.list: ])
+  
+  top-vis = THREE.mesh(obstacle-geom, obstacle-mat)
+  bottom-vis = THREE.mesh(obstacle-geom, obstacle-mat)
+
+  block:
+    MATTER.set-collision-group(top, obstacle-group)
+    MATTER.set-collision-group(bottom, obstacle-group)
+
+    MATTER.composite-translate(composite, x, y)
+    MATTER.add-to-world(engine, [L.list: top, bottom, composite])
+
+    THREE.set-pos(top-vis, x, (obstacle-height / 2) + (obstacle-gap / 2), 0)
+    THREE.set-pos(bottom-vis, x, 0 - (obstacle-height / 2) - (obstacle-gap / 2), 0)
+    THREE.scene-add(scene, top-vis)
+    THREE.scene-add(scene, bottom-vis)
   end
 end
 
