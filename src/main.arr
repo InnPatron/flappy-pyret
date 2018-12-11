@@ -28,6 +28,10 @@ obstacle-height = play-area-height
 obstacle-width = ball-radius * ( 3 / 2 )
 obstacle-gap = ball-radius * 6
 
+# 1 obstacle every obstacle-period units
+obstacle-period = 500
+limbo = 9000
+
 # Collision stuff
 obstacle-group = -1
 player-group = 1
@@ -210,23 +214,48 @@ animator = lam(shadow context):
 
 end
 
+fun init-obstacles(obstacles):
+  var i = 0
+  for L.map(o from obstacles):
+    block:
+      i := i + 1
+      set-obstacle-position(o, i * obstacle-period, 0)
+    end
+  end
+end
+
 fun init-game():
   shadow player = player()
   shadow ground = ground()
 
+  # 10 obstacles
+  obstacles =
+    [L.list:
+      obstacle(limbo, limbo),
+      obstacle(limbo, limbo),
+      obstacle(limbo, limbo),
+      obstacle(limbo, limbo),
+      obstacle(limbo, limbo),
+      obstacle(limbo, limbo),
+      obstacle(limbo, limbo),
+      obstacle(limbo, limbo),
+      obstacle(limbo, limbo),
+      obstacle(limbo, limbo),
+    ]
+      
 
   context = {
     to-update: [L.list: player],
     player: player,
-    camera: camera
+    camera: camera,
+    obstacles: obstacles,
   }
 
   block:
+    init-obstacles(obstacles)
     MATTER.run-engine(runner, engine)
     A.animate(renderer, scene, camera, animator, context)
   end
 end
 
 init-game()
-
-obstacle(400, 0)
