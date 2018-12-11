@@ -34,6 +34,7 @@ player-group = 1
 main-collision-category = MATTER.next-category()
 
 # World init
+text = DOM.get-element("distance")
 scene = THREE.scene()
 camera = THREE.perspective-camera-default()
 renderer = THREE.web-gl-renderer-default()
@@ -175,17 +176,6 @@ fun ground():
 
 end
 
-shadow player = player()
-shadow ground = ground()
-
-text = DOM.get-element("distance")
-
-context = {
-  to-update: [L.list: player],
-  player: player,
-  camera: camera
-}
-
 animator = lam(shadow context):
   block:
 
@@ -220,8 +210,23 @@ animator = lam(shadow context):
 
 end
 
+fun init-game():
+  shadow player = player()
+  shadow ground = ground()
+
+
+  context = {
+    to-update: [L.list: player],
+    player: player,
+    camera: camera
+  }
+
+  block:
+    MATTER.run-engine(runner, engine)
+    A.animate(renderer, scene, camera, animator, context)
+  end
+end
+
+init-game()
+
 obstacle(400, 0)
-
-MATTER.run-engine(runner, engine)
-
-A.animate(renderer, scene, camera, animator, context)
