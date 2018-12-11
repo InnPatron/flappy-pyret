@@ -71,25 +71,25 @@ end
 
 fun obstacle(x, y):
   top = MATTER.rectangle(
-    0,
-    0 - (obstacle-height / 2) - (obstacle-gap / 2),
+    x,
+    y - (obstacle-height / 2) - (obstacle-gap / 2),
     obstacle-width,
     obstacle-height,
     true
   )
 
   bottom = MATTER.rectangle(
-    0,
-    (obstacle-height / 2) + (obstacle-gap / 2),
+    x,
+    y + (obstacle-height / 2) + (obstacle-gap / 2),
     obstacle-width,
     obstacle-height,
     true
   )
 
+  # TODO: FIGURE OUT HOW MATTERJS COMPOUND WORKS
+
   obstacle-geom = THREE.box-geom(obstacle-width, obstacle-height, general-depth)
   obstacle-mat = THREE.simple-mesh-basic-mat(1671168)
-
-  composite = MATTER.composite-create([L.list: top, bottom], [L.list: ])
   
   top-vis = THREE.mesh(obstacle-geom, obstacle-mat)
   bottom-vis = THREE.mesh(obstacle-geom, obstacle-mat)
@@ -102,11 +102,10 @@ fun obstacle(x, y):
     MATTER.set-collision-mask(top, main-collision-category)
     MATTER.set-collision-mask(bottom, main-collision-category)
 
-    MATTER.composite-translate(composite, x, y)
-    MATTER.add-to-world(engine, [L.list: top, bottom, composite])
+    MATTER.add-to-world(engine, [L.list: top, bottom])
 
-    THREE.set-pos(top-vis, x, (obstacle-height / 2) + (obstacle-gap / 2), 0)
-    THREE.set-pos(bottom-vis, x, 0 - (obstacle-height / 2) - (obstacle-gap / 2), 0)
+    THREE.set-pos(top-vis, MATTER.get-pos-x(top), 0 - MATTER.get-pos-y(top), 0)
+    THREE.set-pos(bottom-vis, MATTER.get-pos-x(bottom), 0 - MATTER.get-pos-y(bottom), 0)
     THREE.scene-add(scene, top-vis)
     THREE.scene-add(scene, bottom-vis)
   end
