@@ -105,7 +105,19 @@ module.exports = {
     return MATTER.Body.nextGroup(true);
   },
 
+  'next-category': function() {
+    return MATTER.Body.nextCategory();
+  },
+
   'set-collision-group': function(body, group) {
     body.collisionGroup = group;
+  },
+
+  'set-collision-catgeory': function(body, category) {
+    body.collisionFilter.category = category;
+  },
+
+  'set-collision-mask': function(body, mask) {
+    body.collisionFilter.mask = mask;
   },
 };
