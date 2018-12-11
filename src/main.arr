@@ -27,6 +27,7 @@ general-depth = 20
 x-velocity = 5
 flap-y-velocity = 6
 
+obstacle-y = (play-area-height / 2) * (4 / 5)
 obstacle-height = play-area-height
 obstacle-width = ball-radius * ( 3 / 2 )
 obstacle-gap = ball-radius * 6
@@ -205,7 +206,6 @@ fun ground():
 
 end
 
-
 fun update-obstacles(obstacles, shadow player):
   # last obstacle in the list
   last = L.length(obstacles) - 1
@@ -222,7 +222,7 @@ fun update-obstacles(obstacles, shadow player):
         end
         last-obstacle = L.at(obstacles, last-obstacle-index)
         last-obstacle-position = obstacle-position(last-obstacle)
-        set-obstacle-position(o, last-obstacle-position.x + obstacle-period, 0)
+        set-obstacle-position(o, last-obstacle-position.x + obstacle-period, H.rng(obstacle-y))
       else:
         nothing
       end
@@ -279,7 +279,7 @@ fun init-obstacles(obstacles):
   for L.map(o from obstacles):
     block:
       i := i + 1
-      set-obstacle-position(o, i * obstacle-period, 0)
+      set-obstacle-position(o, i * obstacle-period, H.rng(obstacle-y))
     end
   end
 end
