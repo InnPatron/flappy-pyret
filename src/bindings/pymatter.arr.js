@@ -42,9 +42,9 @@ module.exports = {
     MATTER.Runner.run(runner, engine);
   },
 
-  'start-runner': function(runner) {
+  'start-runner': function(runner, engine) {
     // Equivalent to run-engine()
-    MATTER.Runner.start(runner);
+    MATTER.Runner.start(runner, engine);
   },
 
   'stop-runner': function(runner) {
