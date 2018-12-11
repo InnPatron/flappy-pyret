@@ -108,6 +108,11 @@ fun obstacle(x, y):
     THREE.set-pos(bottom-vis, MATTER.get-pos-x(bottom), 0 - MATTER.get-pos-y(bottom), 0)
     THREE.scene-add(scene, top-vis)
     THREE.scene-add(scene, bottom-vis)
+
+    shadow top = { col: top, vis: top-vis }
+    shadow bottom = { col: bottom, vis: bottom-vis }
+
+    { top: top, bottom: bottom }
   end
 end
 
