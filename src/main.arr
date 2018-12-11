@@ -347,10 +347,13 @@ fun end-game(shadow context):
 end
 
 animator = lam(shadow context):
-  if game-state == state-running:
-    run(context)
-  else:
-    end-game(context)
+  block:
+    THREE.render(renderer, scene, context.camera)
+    if game-state == state-running:
+      run(context)
+    else:
+      end-game(context)
+    end
   end
 end
 
@@ -387,7 +390,8 @@ fun init-game():
     MATTER.set-velocity(player.col, 15, 0)
     init-obstacles(obstacles)
     MATTER.run-engine(runner, engine)
-    A.animate(renderer, scene, camera, animator, context)
+    A.set-context(context)
+    A.animate(renderer, animator, context)
   end
 end
 

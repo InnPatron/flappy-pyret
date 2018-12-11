@@ -1,13 +1,18 @@
-function animate(renderer, scene, camera, animator, context) {
+var animationContext = undefined;
+var pause = false;
+
+function animate(renderer, animator) {
   function innerAnimation(time) {
-    requestAnimationFrame( innerAnimation );
-    animator(context);
-    renderer.render(scene, camera);
+      requestAnimationFrame( innerAnimation );
+      animator(animationContext);
   }
 
   innerAnimation();
 }
 
 module.exports = {
+  'set-context': function(context) {
+    animationContext = context;
+  },
   'animate': animate,
 };
