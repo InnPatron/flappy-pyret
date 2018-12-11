@@ -193,6 +193,11 @@ fun ground():
     MATTER.set-collision-mask(bottom-collider, main-collision-category)
     MATTER.add-to-world(engine, [L.list: bottom-collider, top-collider])
 
+    top = { vis: top-vis, col: top-collider }
+    bottom = { vis: bottom-vis, col: bottom-collider }
+
+    { top: top, bottom: bottom }
+
   end
 
 end
@@ -296,6 +301,7 @@ fun init-game():
     player: player,
     camera: camera,
     obstacles: obstacles,
+    ground: ground,
   }
 
   block:
