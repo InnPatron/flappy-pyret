@@ -11,6 +11,9 @@ import js-file("input") as I
 import js-file("helpers") as H
 
 # Constants
+state-running = 1
+state-end = 0
+
 ball-radius = 15
 sphere-segments = 15
 
@@ -40,6 +43,7 @@ player-group = 1
 main-collision-category = MATTER.next-category()
 
 # World init
+var game-state = state-running
 text = DOM.get-element("distance")
 scene = THREE.scene()
 camera = THREE.perspective-camera-default()
@@ -243,7 +247,10 @@ fun check-game-over(shadow context):
  
   if collision:
     # Game ended
-    MATTER.stop-runner(runner)
+    block:
+      game-state := state-end
+      MATTER.stop-runner(runner)
+    end
   else:
 
     shadow collision = if MATTER.collides(context.ground.bottom.col, context.player.col):
@@ -256,7 +263,10 @@ fun check-game-over(shadow context):
 
     if collision:
       # Game ended
-      MATTER.stop-runner(runner)
+      block:
+        game-state := state-end
+        MATTER.stop-runner(runner)
+      end
     else:
       nothing
     end
@@ -264,9 +274,19 @@ fun check-game-over(shadow context):
   end
 end
 
-animator = lam(shadow context):
-  block:
+fun init-obstacles(obstacles):
+  var i = 0
+  for L.map(o from obstacles):
+    block:
+      i := i + 1
+      set-obstacle-position(o, i * obstacle-period, 0)
+    end
+  end
+end
 
+fun run(shadow context):
+  block:
+    
     for L.map(u from context.to-update):
 
       block:
@@ -302,16 +322,35 @@ animator = lam(shadow context):
     end
 
   end
-
 end
 
-fun init-obstacles(obstacles):
-  var i = 0
-  for L.map(o from obstacles):
-    block:
-      i := i + 1
-      set-obstacle-position(o, i * obstacle-period, 0)
-    end
+fun reset(shadow context):
+  block:
+    G.console-log("RESET")
+    game-state := state-running
+
+    init-obstacles(context.obstacles)
+
+    MATTER.set-pos(context.player.col, 0, 0)
+    MATTER.set-velocity(context.player.col, x-velocity, 0)
+
+    MATTER.start-runner(runner, engine)
+  end
+end
+
+fun end-game(shadow context):
+  if I.query-input().space:
+    reset(context)
+  else:
+    nothing
+  end
+end
+
+animator = lam(shadow context):
+  if game-state == state-running:
+    run(context)
+  else:
+    end-game(context)
   end
 end
 
@@ -344,7 +383,8 @@ fun init-game():
   }
 
   block:
-    MATTER.set-velocity(player.col, x-velocity, 0)
+    MATTER.set-velocity(player.col, 0, 0)
+    MATTER.set-velocity(player.col, 15, 0)
     init-obstacles(obstacles)
     MATTER.run-engine(runner, engine)
     A.animate(renderer, scene, camera, animator, context)
