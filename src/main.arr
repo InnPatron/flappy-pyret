@@ -326,7 +326,6 @@ end
 
 fun reset(shadow context):
   block:
-    G.console-log("RESET")
     game-state := state-running
 
     init-obstacles(context.obstacles)
