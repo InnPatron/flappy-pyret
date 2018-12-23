@@ -346,15 +346,25 @@ fun end-game(shadow context):
   end
 end
 
-animator = lam(shadow context):
-  block:
-    THREE.render(renderer, scene, context.camera)
-    if game-state == state-running:
-      run(context)
-    else:
-      end-game(context)
+fun outer-animator(shadow context):
+    block:
+      raf = A.request-animation-frame
+
+      fun animator(delta-time):
+        block:
+          THREE.render(renderer, scene, context.camera)
+          if game-state == state-running:
+            run(context)
+          else:
+            end-game(context)
+          end
+
+          raf(animator)
+        end
+      end
+      
+      raf(animator)
     end
-  end
 end
 
 fun init-game():
@@ -390,8 +400,7 @@ fun init-game():
     MATTER.set-velocity(player.col, 15, 0)
     init-obstacles(obstacles)
     MATTER.run-engine(runner, engine)
-    A.set-context(context)
-    A.animate(renderer, animator, context)
+    outer-animator(context)
   end
 end
 
